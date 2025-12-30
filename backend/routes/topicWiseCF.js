@@ -37,9 +37,16 @@ router.get('/:user/:tutor',async (req,res)=>{
                 flag = 1;
                 break;}
             } 
-        if(!flag) userHash[contest].push(question);}
+        if(!flag) userHash[contest].push({
+            question:question,
+            isTaken: 0,
+        })
+    };
     
- 
+    
+    
+    let userCompleted = 0,total = 0; // Here userCompleted are the total questions that are the common question between user and tutor while total quetion are total question done by use...
+    // Also total does not include the questions which are attempted by tutor but yet not accepted but remember those question will appear in final list
     
     // Hashing the tutor questions that are not marked in user hash
     let tutorHash = [];
@@ -50,7 +57,11 @@ router.get('/:user/:tutor',async (req,res)=>{
         let question = tutorData[i].problem.index;
         let flag = 1;
         for(let j = 0;j<userHash[contest].length;j++){
-            if(userHash[contest][j]===question){
+            if(userHash[contest][j].question===question){
+                if(tutorData[i].verdict==="OK" && !userHash[contest][j].isTaken){
+                    userHash[contest][j].isTaken = 1;
+                    userCompleted++;
+                    total++;}
                 flag = 0;
                 break;} 
             }
@@ -75,8 +86,14 @@ router.get('/:user/:tutor',async (req,res)=>{
             correctAttempt: 0,
             incorrectAttempt: 0,
         });
-        (tutorData[i].verdict==="OK") ? tutorHash[contest][tutorHash[contest].length-1].correctAttempt++ : tutorHash[contest][tutorHash[contest].length-1].incorrectAttempt++;}
+        (tutorData[i].verdict==="OK") ? tutorHash[contest][tutorHash[contest].length-1].correctAttempt++ : tutorHash[contest][tutorHash[contest].length-1].incorrectAttempt++;
+        if(tutorHash[contest][tutorHash[contest].length-1].correctAttempt===1) total++;
+    }
     
+
+
+
+
 
     let topicArray = ["implementation","math","brute force","sortings","binary search","two pointers","strings","bit manipulation","greedy","data structures","number theory","combinatorics","graphs","trees","dp","constructive algorithms","game theory","probabilities","geometry","interactive"]
     let questionArray = [];
@@ -103,7 +120,7 @@ router.get('/:user/:tutor',async (req,res)=>{
         }
     }
             
-    res.status(200).json({type:1,topicArray,questionArray}); 
+    res.status(200).json({type:1,userCompleted,total,topicArray,questionArray}); 
         })
 
 
