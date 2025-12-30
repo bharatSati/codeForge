@@ -23,7 +23,7 @@ router.get('/:user/:tutor',async (req,res)=>{
 
     let userData = userRawData.data.result,tutorData = tutorRawData.data.result;
     
-
+    // Hashing the user Questions that have been accepted to prevent already done questions
     let userHash = [];
     for(let i = 0;i<=3000;i++) userHash.push([]);
     for(let i = 0;i<userData.length;i++){
@@ -42,7 +42,7 @@ router.get('/:user/:tutor',async (req,res)=>{
     
  
     
-
+    // Hashing the tutor questions that are not marked in user hash
     let tutorHash = [];
     for(let i = 0;i<=3000;i++) tutorHash.push([]);
     for(let i = 0;i<tutorData.length;i++){

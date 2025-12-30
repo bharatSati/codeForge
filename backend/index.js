@@ -11,7 +11,7 @@
 
 
  app.use('/ratedQuestions',ratedQuestions);
-
+ app.use('/topicWiseCF',topicWiseCF)
 
  app.get("/hello",(req,res)=>{
     res.send("hello");
