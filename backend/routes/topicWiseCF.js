@@ -22,13 +22,30 @@ router.get('/:user/:tutor',async (req,res)=>{
 
 
     let userData = userRawData.data.result,tutorData = tutorRawData.data.result;
+
+    let verdict = ["MEMORY_LIMIT_EXCEEDED","WRONG_ANSWER","TIME_LIMIT_EXCEEDED","COMPILATION_ERROR","RUNTIME_ERROR"];
+    let verdictArray = [];
+    for(let i = 0;i<verdict.length;i++) verdictArray.push({
+        verdictCount: 0,
+        avgPassedTestCases: 0
+    });
+
     
     // Hashing the user Questions that have been accepted to prevent already done questions
     let userHash = [];
     for(let i = 0;i<=3000;i++) userHash.push([]);
     for(let i = 0;i<userData.length;i++){
         if(!userData[i].problem.rating) continue;
-        if(userData[i].verdict!=='OK') continue;
+        if(userData[i].verdict!=='OK'){
+            for(let j = 0;j<verdict.length;j++){
+                if(userData[i].verdict===verdict[j]){
+                    verdictArray[j].verdictCount+=1;
+                    let temp = verdictArray[j].avgPassedTestCases;
+                    if(!temp) verdictArray[j].avgPassedTestCases = userData[i].passedTestCount;
+                    else verdictArray[j].avgPassedTestCases = (temp+userData[i].passedTestCount)/2;}
+            }
+            continue;
+        }
         let flag = 0;
         let contest = userData[i].problem.contestId;
         let question = userData[i].problem.index;
@@ -120,7 +137,7 @@ router.get('/:user/:tutor',async (req,res)=>{
         }
     }
             
-    res.status(200).json({type:1,userCompleted,total,topicArray,questionArray}); 
+    res.status(200).json({type:1,verdict,verdictArray,userCompleted,total,topicArray,questionArray}); 
         })
 
 
