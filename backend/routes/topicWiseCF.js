@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+const responseGenerator = require("./topicWiseAI.js");
+
 
 router.get('/:user/:tutor',async (req,res)=>{
     let user = req.params.user;
@@ -13,6 +15,14 @@ router.get('/:user/:tutor',async (req,res)=>{
         if(error.response) return res.status(400).json({type:2 , message:error.response.data.comment});
         return res.status(400).json({type:3 , message:"Server Error"});
     }
+
+
+    let userAiData = {
+        user,
+        rating: response.data.result[0].rating,
+        maxRating: response.data.result[0].maxRating,
+    }
+
     let userRawData,tutorRawData;
     try{
         userRawData = await axios.get(`https://codeforces.com/api/user.status?handle=${user}&from=1&count=1000000000`);
@@ -24,11 +34,22 @@ router.get('/:user/:tutor',async (req,res)=>{
     let userData = userRawData.data.result,tutorData = tutorRawData.data.result;
 
     let verdict = ["MEMORY_LIMIT_EXCEEDED","WRONG_ANSWER","TIME_LIMIT_EXCEEDED","COMPILATION_ERROR","RUNTIME_ERROR"];
+    let topicArray = ["implementation","math","brute force","sortings","binary search","two pointers","strings","bit manipulation","greedy","data structures","number theory","combinatorics","graphs","trees","dp","constructive algorithms","game theory","probabilities","geometry","interactive"];
     let verdictArray = [];
     for(let i = 0;i<verdict.length;i++) verdictArray.push({
         verdictCount: 0,
+        totalPassedTestCases: 0,
         avgPassedTestCases: 0
     });
+    let verdictTopicWise = [];
+    for(let i = 0;i<topicArray.length;i++){
+        verdictTopicWise.push([]);
+        for(let j = 0;j<verdict.length;j++) verdictTopicWise[i].push({
+            verdictCount: 0,
+            totalPassedTestCases: 0,
+            avgPassedTestCases: 0
+        })
+    }
 
     
     // Hashing the user Questions that have been accepted to prevent already done questions
@@ -37,13 +58,42 @@ router.get('/:user/:tutor',async (req,res)=>{
     for(let i = 0;i<userData.length;i++){
         if(!userData[i].problem.rating) continue;
         if(userData[i].verdict!=='OK'){
+            // Whenever we reached a user non accepted solution we will not hash it but before it we will extract some stats data from it
+            
+
+            /*
+            The first step stores the data for overall analysis of user.
+            here we made a array verdictArray that has some keys which can be mapped with 
+            verdict array so that type of verdct can be known. verdictArray contains 3 field - 
+            verdictCount - the total count of wrong submission of particular type of verdict
+            totalPassedTestCases - overall all test cases that passed in all the problem of particular type
+            avgPassedTestCases - It is calculated at the end using above 2 information
+            */ 
             for(let j = 0;j<verdict.length;j++){
                 if(userData[i].verdict===verdict[j]){
                     verdictArray[j].verdictCount+=1;
-                    let temp = verdictArray[j].avgPassedTestCases;
-                    if(!temp) verdictArray[j].avgPassedTestCases = userData[i].passedTestCount;
-                    else verdictArray[j].avgPassedTestCases = (temp+userData[i].passedTestCount)/2;}
+                    verdictArray[j].totalPassedTestCases+=userData[i].passedTestCount;    
+                }
             }
+            
+            /*
+            In this second step all things are same as step1. But here a detailed analysis can be made because 
+            in this step we have done the step1 for all the topocs separately and stored them in verdictTopicWise
+            */
+            for(let j = 0;j<userData[i].problem.tags.length;j++){
+                for(let k = 0;k<topicArray.length;k++){
+                    if(userData[i].problem.tags[j]===topicArray[k]){
+                        for(let l = 0;l<verdict.length;l++){
+                            if(userData[i].verdict===verdict[l]){
+                                verdictTopicWise[k][l].verdictCount+=1;
+                                verdictTopicWise[k][l].totalPassedTestCases+=userData[i].passedTestCount; 
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                }
             continue;
         }
         let flag = 0;
@@ -59,6 +109,11 @@ router.get('/:user/:tutor',async (req,res)=>{
             isTaken: 0,
         })
     };
+
+
+    for(let i = 0;i<verdict.length;i++){
+        verdictArray[i].avgPassedTestCases = verdictArray[i].totalPassedTestCases/verdictArray[i].verdictCount;
+    }
     
     
     
@@ -112,7 +167,7 @@ router.get('/:user/:tutor',async (req,res)=>{
 
 
 
-    let topicArray = ["implementation","math","brute force","sortings","binary search","two pointers","strings","bit manipulation","greedy","data structures","number theory","combinatorics","graphs","trees","dp","constructive algorithms","game theory","probabilities","geometry","interactive"]
+    
     let questionArray = [];
     for(let i = 0;i<topicArray.length;i++) questionArray.push([]);
     for(let i = 0;i<tutorHash.length;i++){
@@ -137,9 +192,12 @@ router.get('/:user/:tutor',async (req,res)=>{
         }
     }
             
-    res.status(200).json({type:1,verdict,verdictArray,userCompleted,total,topicArray,questionArray}); 
+    res.status(200).json({type:1,response:userAiData,verdict,verdictArray,userCompleted,total,topicArray,questionArray,verdictTopicWise}); 
         })
 
+    
 
+module.exports = 
 
-module.exports = router
+    router
+  
