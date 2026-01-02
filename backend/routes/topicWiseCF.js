@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const responseGenerator = require("./topicWiseAI.js");
+const ai = require("./topicWiseAI");
+
+
+
 
 
 router.get('/:user/:tutor',async (req,res)=>{
@@ -17,7 +20,7 @@ router.get('/:user/:tutor',async (req,res)=>{
     }
 
 
-    let userAiData = {
+    let userProfileData = {
         user,
         rating: response.data.result[0].rating,
         maxRating: response.data.result[0].maxRating,
@@ -191,13 +194,25 @@ router.get('/:user/:tutor',async (req,res)=>{
             }
         }
     }
-            
-    res.status(200).json({type:1,response:userAiData,verdict,verdictArray,userCompleted,total,topicArray,questionArray,verdictTopicWise}); 
+         
+
+    let dataForAi = {
+        userProfileData,
+        verdict,
+        verdictArray,
+        topicArray,
+        verdictTopicWise
+    }
+    
+    let aiData
+    try{ aiData = await ai(dataForAi) }
+    catch(error) {aiData = error}
+   
+
+    res.status(200).json({type:1,aiData,verdict,verdictArray,userCompleted,total,topicArray,questionArray,verdictTopicWise}); 
         })
 
     
 
-module.exports = 
-
-    router
+module.exports = router
   
