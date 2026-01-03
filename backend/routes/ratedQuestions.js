@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+const ai = require("./ratedQuestionsAI");
 
 
 
@@ -15,6 +16,11 @@ router.get('/:user/:tutor',async (req,res)=>{
         if(error.response) return res.status(400).json({type:2 , message:error.response.data.comment});
         return res.status(400).json({type:3 , message:"Server Error"});
     }
+    let userProfileData = {
+        user,
+        rating: response.data.result[0].rating,
+        maxRating: response.data.result[0].maxRating,
+    }
     let userRawData,tutorRawData;
     try{
         userRawData = await axios.get(`https://codeforces.com/api/user.status?handle=${user}&from=1&count=1000000000`);
@@ -25,13 +31,64 @@ router.get('/:user/:tutor',async (req,res)=>{
 
     let userData = userRawData.data.result,tutorData = tutorRawData.data.result;
     
+
+
+    let verdict = ["MEMORY_LIMIT_EXCEEDED","WRONG_ANSWER","TIME_LIMIT_EXCEEDED","COMPILATION_ERROR","RUNTIME_ERROR"];
+    let verdictArray = [];
+    for(let i = 0;i<verdict.length;i++) verdictArray.push({
+        verdictCount: 0,
+        totalPassedTestCases: 0,
+        avgPassedTestCases: 0
+    });
+    let verdictRatingWise = [];
+    for(let i = 0;i<=40;i++){
+        verdictRatingWise.push([]);
+        for(let j = 0;j<verdict.length;j++) verdictRatingWise[i].push({
+            verdictCount: 0,
+            totalPassedTestCases: 0,
+            avgPassedTestCases: 0
+        })
+    }
+
     // Hashing the user Questions that have been accepted to prevent already done questions
     let userHash = [];
     for(let i = 0;i<=3000;i++) userHash.push([]);
     for(let i = 0;i<userData.length;i++){
         // For rated questions backend we will skip unrated questions
         if(!userData[i].problem.rating) continue;
-        if(userData[i].verdict!=='OK') continue;
+        if(userData[i].verdict!=='OK'){
+            // Whenever we reached a user non accepted solution we will not hash it but before it we will extract some stats data from it
+            
+
+            /*
+            The first step stores the data for overall analysis of user.
+            here we made a array verdictArray that has some keys which can be mapped with 
+            verdict array so that type of verdct can be known. verdictArray contains 3 field - 
+            verdictCount - the total count of wrong submission of particular type of verdict
+            totalPassedTestCases - overall all test cases that passed in all the problem of particular type
+            avgPassedTestCases - It is calculated at the end using above 2 information
+            */ 
+            for(let j = 0;j<verdict.length;j++){
+                if(userData[i].verdict===verdict[j]){
+                    verdictArray[j].verdictCount+=1;
+                    verdictArray[j].totalPassedTestCases+=userData[i].passedTestCount;    
+                }
+            }
+            
+            /*
+            In this second step all things are same as step1. But here a detailed analysis can be made because 
+            in this step we have done the step1 for all the rating separately and stored them in ratingTopicWise
+            */
+        
+            for(let j = 0;j<verdict.length;j++){
+                if(userData[i].verdict===verdict[j]){
+                    verdictRatingWise[userData[i].problem.rating/100][j].verdictCount+=1;
+                    verdictRatingWise[userData[i].problem.rating/100][j].totalPassedTestCases+=userData[i].passedTestCount; 
+                    break;
+                }
+            }
+            continue;
+        }
         let flag = 0;
         let contest = userData[i].problem.contestId;
         let question = userData[i].problem.index;
@@ -109,6 +166,17 @@ router.get('/:user/:tutor',async (req,res)=>{
             });
         }
     }
+
+    let dataForAi = {
+        userProfileData,
+        verdict,
+        verdictArray,
+        verdictRatingWise
+    }
+    
+    let aiData
+    try{ aiData = await ai(dataForAi) }
+    catch(error) {aiData = error}
             
     res.status(200).json({type:1,userCompleted,total,ratedArray}); 
         })
