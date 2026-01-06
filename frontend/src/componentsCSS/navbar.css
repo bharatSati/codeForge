@@ -1,0 +1,15 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+.navbar{
+    height: 10vh;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.312);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    left: 0px;
+    top: 0px;
+}

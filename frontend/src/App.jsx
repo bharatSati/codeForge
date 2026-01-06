@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import  Card1  from './components/card1.jsx'
+import  Navbar  from './components/navbar.jsx'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <></>
+    <>
+    <Navbar></Navbar>
+    hello
+    <Card1></Card1>
+        hello
+    </>
   )
 }
 export default App
