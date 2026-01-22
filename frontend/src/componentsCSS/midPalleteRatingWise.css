@@ -1,0 +1,54 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    color: white;
+}
+
+
+
+.midPalleteRatingWise{
+  font-family: "Ubuntu", sans-serif;
+  font-style: normal;
+    height: auto;
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   padding-left: 10vh;
+   padding-right: 10vh;
+}
+
+.ratingPallete1{
+    width: 75%;
+    height: auto;
+}
+
+.ratingPallete2{
+    width: 20%;
+    height: auto;
+}
+
+
+@media(max-width: 900px){
+    .midPalleteRatingWise{
+        flex-direction: column;
+        padding-left: 5vh;
+        padding-right: 5vh;
+    }
+    .ratingPallete1{
+        width: 100%;
+        }
+    .ratingPallete2{
+        width: 100%;
+    }
+    
+}
+
+@media(max-width: 600px){
+    .midPalleteRatingWise{
+        padding-left: 2vh;
+        padding-right: 2vh;
+    }
+  
+    
+}
