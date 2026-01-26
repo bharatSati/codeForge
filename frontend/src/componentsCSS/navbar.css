@@ -9,7 +9,8 @@
     width: 100%;
     background-color: rgba(0, 0, 0, 0.312);
     backdrop-filter: blur(10px);
-    position: sticky;
+    position: fixed;
     left: 0px;
     top: 0px;
+    z-index: 1;
 }

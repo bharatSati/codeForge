@@ -1,0 +1,111 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    color: white;
+}
+
+.headingQuestionPallete {
+    height: auto;
+    width: auto;
+   
+
+}
+
+.headingQuestionPallete *{
+    font-family: "Montserrat", sans-serif !important;
+    color: white !important;
+    font-weight: 800 !important;
+
+}
+
+.questionPallete{
+    height:auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    border: 1.5px solid rgba(255, 255, 255, 0.226);
+  contain: paint;
+}
+
+.problemRow{
+    font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.226);
+    contain: paint;
+    
+}
+
+.problem{
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 60%;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.acceptanceRate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-right: 10px;
+    height: auto;
+    width: 25%;
+    color: rgba(137, 192, 255, 0.8);
+}
+
+.solution{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 15%;
+    color: rgba(9, 255, 0, 0.8);
+}
+
+@media(max-width: 900px){
+    .problemRow{
+        font-size: 18px;
+    }
+
+    .problem{
+        width: 50%;
+    }
+
+    .acceptanceRate{
+        width: 35%;
+    }
+    
+}
+
+@media(max-width: 600px){
+    .problemRow{
+        font-size: 15px;
+    }
+
+
+    
+}
+
+@media(max-width: 450px){
+    .problemRow{
+        font-size: 15px;
+    }
+
+    .headingQuestionPallete *{
+    font-size: 13px;
+
+}
+}
+

@@ -1,0 +1,103 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    color: white;
+}
+
+
+.paddingManager{
+    padding-left: 10vh;
+    padding-right: 10vh;
+    height: auto;
+    width: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+}
+
+.midPalleteRatingWise{
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.topMidPalleteRatingWise{
+  font-family: "Ubuntu", sans-serif;
+  font-style: normal;
+    height: auto;
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+}
+
+
+.bottomMidPalleteRatingWise{
+    display: flex;
+  padding-top: 20px;
+  font-family: "Ubuntu", sans-serif;
+  font-style: normal;
+    height: auto;
+   width: 100%;
+   justify-content: space-between;
+}
+
+.ratingPallete1{
+    width: 75%;
+    height: auto;
+}
+
+.ratingPallete2{
+    width: 20%;
+    height: auto;
+}
+
+.ratingPallete3{
+    display: none;
+}
+
+.ratingPallete4{
+    width: 100%;
+    height: auto;
+}
+
+
+@media(max-width: 900px){
+    .paddingManager{
+         padding-left: 5vh;
+        padding-right: 5vh;
+
+    }
+    .midPalleteRatingWise{
+        flex-direction: column;
+       
+    }
+    .ratingPallete1{
+        width: 100%;
+        }
+    .ratingPallete2{
+        display: none;
+    }
+
+    .ratingPallete3{
+        display: flex;
+        width: 20%;
+    }
+
+    .ratingPallete4{
+        width: 75%;
+    }
+    
+}
+
+@media(max-width: 600px){
+    .paddingManager{
+        padding-left: 2vh;
+        padding-right: 2vh;
+    }
+  
+    
+}
+
