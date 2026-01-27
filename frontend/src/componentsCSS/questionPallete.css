@@ -12,12 +12,50 @@
 
 }
 
-.headingQuestionPallete *{
-    font-family: "Montserrat", sans-serif !important;
-    color: white !important;
-    font-weight: 800 !important;
-
+.headingProblemRow{
+    font-family: "Montserrat", sans-serif;
+    color: white;
+    font-weight: 800;
+    font-size: 20px;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.226);
+    contain: paint;
+    transition: 0.2s ease-out;
 }
+
+.headingProblem{
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 60%;
+    background: transparent;
+}
+
+.headingAcceptanceRate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-right: 10px;
+    height: auto;
+    width: 25%;
+    background: transparent;
+}
+
+.headingSolution{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 15%;
+    background: transparent;
+}
+
 
 .questionPallete{
     height:auto;
@@ -30,6 +68,7 @@
 }
 
 .problemRow{
+    overflow: hidden;
     font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
@@ -43,8 +82,9 @@
     display: flex;
     border-bottom: 1.5px solid rgba(255, 255, 255, 0.226);
     contain: paint;
-    
+    transition: 0.2s ease-out;
 }
+
 
 .problem{
     display: flex;
@@ -52,6 +92,9 @@
     height: auto;
     width: 60%;
     color: rgba(255, 255, 255, 0.8);
+    transition: 0.2s ease-out;
+    background: transparent;
+    cursor: pointer;
 }
 
 .acceptanceRate{
@@ -63,6 +106,8 @@
     height: auto;
     width: 25%;
     color: rgba(137, 192, 255, 0.8);
+    transition: 0.2s ease-out;
+    background: transparent;
 }
 
 .solution{
@@ -72,10 +117,21 @@
     height: auto;
     width: 15%;
     color: rgba(9, 255, 0, 0.8);
+    transition: 0.2s ease-out;
+    background: transparent;
 }
+
+.problemRow:hover{
+        background-color: rgba(255, 255, 255, 0.1);
+}
+
 
 @media(max-width: 900px){
     .problemRow{
+        font-size: 18px;
+    }
+
+    .headingProblemRow{
         font-size: 18px;
     }
 
@@ -84,6 +140,14 @@
     }
 
     .acceptanceRate{
+        width: 35%;
+    }
+
+    .headingProblem{
+        width: 50%;
+    }
+
+    .headingAcceptanceRate{
         width: 35%;
     }
     
@@ -95,6 +159,10 @@
     }
 
 
+    .headingProblemRow{
+        font-size: 15px;
+    }
+
     
 }
 
@@ -103,7 +171,7 @@
         font-size: 15px;
     }
 
-    .headingQuestionPallete *{
+    .headingProblemRow{
     font-size: 13px;
 
 }
