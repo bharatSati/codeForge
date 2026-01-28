@@ -93,7 +93,6 @@
     width: 60%;
     color: rgba(255, 255, 255, 0.8);
     transition: 0.2s ease-out;
-    background: transparent;
     cursor: pointer;
 }
 
@@ -107,7 +106,7 @@
     width: 25%;
     color: rgba(137, 192, 255, 0.8);
     transition: 0.2s ease-out;
-    background: transparent;
+
 }
 
 .solution{
@@ -118,7 +117,6 @@
     width: 15%;
     color: rgba(9, 255, 0, 0.8);
     transition: 0.2s ease-out;
-    background: transparent;
 }
 
 .problemRow:hover{

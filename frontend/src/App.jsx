@@ -1,15 +1,27 @@
 import { useState } from 'react'
 import './App.css'
-import RatingWiseRoute from './pages/ratingWise'
-import Info from './pages/info'
+import React from 'react'
+import { BrowserRouter, Routes ,Route } from 'react-router-dom'
+const Info = React.lazy(()=>(import("./pages/info")))
+const RatingWise = React.lazy(()=>(import("./pages/ratingWise")))
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-    <Info></Info>
+   <>
+        <BrowserRouter>
+            <Routes>
+              <Route path='/enterDetails' element = {<Info/>}/>
+              <Route path='/ratedSheet' element = {<RatingWise/>}/>
+            </Routes>
+        </BrowserRouter>
+      <ToastContainer position="top-right"  autoClose={3000} />
     </>
   )
 }
+
 export default App
