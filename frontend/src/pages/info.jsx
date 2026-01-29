@@ -23,7 +23,8 @@ export default function Info(){
         try {
             console.log(user)
             result = await axios.get(`http://localhost:3000/ratedQuestions/${user}/${friend}`);
-            setRatedData(result);
+            setRatedData(result.data);
+            console.log(result);
             navigate("/ratedSheet");
         }
         catch(error){ toast.error(error.response.data.message); }

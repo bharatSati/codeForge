@@ -85,6 +85,9 @@
     transition: 0.2s ease-out;
 }
 
+a{
+    text-decoration: none;
+}
 
 .problem{
     display: flex;

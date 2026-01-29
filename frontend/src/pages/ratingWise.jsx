@@ -1,6 +1,6 @@
 import "../componentsCSS/ratingWiseRoute.css"
 import { useNavigate } from "react-router-dom"
-import { useContext , useEffect} from "react"
+import { useState , useContext , useEffect} from "react"
 import { RatedDataContext } from "../context/ratedDataContext.jsx"
 import  RatingPallete  from '../components/ratingPallete.jsx'
 import  ProgressPallete  from '../components/progressPallete.jsx'
@@ -18,7 +18,7 @@ export default function RatingWiseRoute(){
             navigate('/enterDetails');
             toast.error("Enter Details First");}
     },[])
-
+    const [ currentRating , setCurrentRating ] = useState(800);
     return(
         <>
         <Navbar></Navbar>
@@ -26,7 +26,7 @@ export default function RatingWiseRoute(){
         <div className="paddingManager">
             <div className="midPalleteRatingWise">
                 <div className="topMidPalleteRatingWise">
-                    <div className="ratingPallete1"><RatingPallete></RatingPallete></div>
+                    <div className="ratingPallete1"><RatingPallete currentRating = {currentRating} setCurrentRating = {setCurrentRating}></RatingPallete></div>
                     <div className="ratingPallete2"><ProgressPallete></ProgressPallete></div>
                 </div>
                 <div className="bottomMidPalleteRatingWise">
@@ -36,7 +36,7 @@ export default function RatingWiseRoute(){
             </div>
         </div>
 
-        <div className="paddingManager"><QuestionPallete></QuestionPallete></div>
+        <div className="paddingManager"><QuestionPallete questions={ratedData?.ratedArray?.[currentRating / 100] || []}></QuestionPallete></div>
         </>
     )
 

@@ -63,5 +63,28 @@
     font-weight: 800;
     font-size: 15px;
     cursor: pointer;
+    border: 1.5px solid rgba(139, 255, 62, 0.406);
+    transition: 0.3s ease-out;
 }
+
+
+.ratingBoxSelected{
+    background-color: rgba(130, 255, 130, 0.219);
+    height: auto;
+    width: 10%;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1.5px solid rgba(139, 255, 62, 0.829);
+    contain: paint;
+    border-radius: 5px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+     transition: 0.3s ease-out;
+}
+
+
 

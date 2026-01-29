@@ -1,6 +1,7 @@
 import "../componentsCSS/questionPallete.css"
 
-export default function QuestionPallete(){
+
+export default function QuestionPallete({ questions }){
 
     return(
         <div className="questionPallete">
@@ -11,77 +12,18 @@ export default function QuestionPallete(){
                 <div className="headingAcceptanceRate">Acceptance&nbsp; Ratio</div>
                 <div className="headingSolution">Solution</div>
             </div>
-    
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
-        <div className="problemRow">
-            <div className="problem">ipsumdollar what the question demands and what it want to convey</div>
-            <div className="acceptanceRate">90.89%</div>
-            <div className="solution">LINK</div>
-        </div>
+
+        {questions && questions.map((e,i)=>{
+            return (
+                <div key = {i} className="problemRow">
+                    <a className="problem" href={`https://codeforces.com/contest/${e.contestId}/problem/${e.index}`} target="_blank" rel="noopener noreferrer">`${i+1}. {e.question}` </a>
+                    <div className="acceptanceRate">{e.acceptanceRate}</div>
+                    <a className="solution" href={`https://codeforces.com/contest/${e.contestId}/submission/${e.solution}`} target="_blank" rel="noopener noreferrer">LINK</a>
+                </div>
+
+            )
+
+        })}
 
         </div>
     )
