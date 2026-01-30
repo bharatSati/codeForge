@@ -142,7 +142,7 @@ router.get('/:user/:tutor',async (req,res)=>{
             index: question,
             question: tutorData[i].problem.name,
             rating: Number(tutorData[i].problem.rating),
-            solution: (tutorData[i].verdict==="OK") ? tutorData[i].id:`${tutor} has no correct submission for this problem`,
+            solution: (tutorData[i].verdict==="OK") ? tutorData[i].id:`NA`,
             correctAttempt: 0,
             incorrectAttempt: 0,
         });
@@ -177,8 +177,11 @@ router.get('/:user/:tutor',async (req,res)=>{
     let aiData
     try{ aiData = await ai(dataForAi) }
     catch(error) {aiData = error}
-            
-    res.status(200).json({type:1,userCompleted,total,ratedArray}); 
+
+    const badText = aiData;
+    const cleanedText = badText.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+    res.status(200).json({type:1,user,parsed, avatar:response.data.result[0].titlePhoto,userCompleted,total,ratedArray}); 
         })
 
 

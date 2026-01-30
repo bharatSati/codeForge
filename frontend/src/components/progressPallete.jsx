@@ -1,10 +1,10 @@
 import "../componentsCSS/progressPallete.css"
 
-export default function ProgressPallete(){
+export default function ProgressPallete({userCompleted , total}){
 
     return(
         <div className="progressPallete">
-          hello
+            {userCompleted} / {total}
         </div>
     )
 

@@ -20,24 +20,24 @@ export default function RatingWiseRoute(){
     },[])
     const [ currentRating , setCurrentRating ] = useState(800);
     return(
-        <>
+        <div className="ratingWise">
         <Navbar></Navbar>
-        <Card1></Card1>
+        <Card1 content = {ratedData?.parsed[0] || []} avatar = {ratedData?.avatar || ""} user = {ratedData?.user || ""}></Card1>
         <div className="paddingManager">
             <div className="midPalleteRatingWise">
                 <div className="topMidPalleteRatingWise">
                     <div className="ratingPallete1"><RatingPallete currentRating = {currentRating} setCurrentRating = {setCurrentRating}></RatingPallete></div>
-                    <div className="ratingPallete2"><ProgressPallete></ProgressPallete></div>
+                    <div className="ratingPallete2"><ProgressPallete total = {ratedData?.total || ""} userCompleted = {ratedData?.userCompleted || ""}></ProgressPallete></div>
                 </div>
                 <div className="bottomMidPalleteRatingWise">
-                    <div className="ratingPallete3"><ProgressPallete></ProgressPallete></div>
-                    <div className="ratingPallete4"><AdviceBox></AdviceBox></div>
+                    <div className="ratingPallete3"><ProgressPallete total = {ratedData?.total || ""} userCompleted = {ratedData?.userCompleted || ""}></ProgressPallete></div>
+                    <div className="ratingPallete4"><AdviceBox content = {ratedData?.parsed[1][(currentRating-800)/100].analysis || ""}></AdviceBox></div>
                 </div>
             </div>
         </div>
 
         <div className="paddingManager"><QuestionPallete questions={ratedData?.ratedArray?.[currentRating / 100] || []}></QuestionPallete></div>
-        </>
+        </div>
     )
 
 }

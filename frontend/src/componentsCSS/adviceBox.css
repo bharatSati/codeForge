@@ -7,15 +7,16 @@
 .adviceBox{
     height: auto;
     width: 100%;
-     font-family: "DM Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  font-style: normal;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    font-style: normal;
     padding: 30px;
-     border-radius: 15px;
-  border: 1.5px solid rgba(255, 255, 255, 0.226);
-  contain: paint;
+    border-radius: 15px;
+    border: 1.5px solid rgba(255, 255, 255, 0.226);
+    contain: paint;
+    font-size: 20px;
 }
 
 @media(max-width: 600px){

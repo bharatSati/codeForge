@@ -4,46 +4,168 @@
     box-sizing: border-box;
 }
 
-.userInfoCard{
-    padding: 10vh;
-    padding-left: 5vh;
-    padding-right: 5vh;
-    font-size: 100px;
+
+.card1{
     height: auto;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.121);
+    padding-top: 15vh;
+    background-color: black;
+}
+
+
+.userInfoCard{
+    height: auto;
+    width: 100%;
+    padding-left: 10vh;
+    padding-right: 10vh;
     display: flex;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .card1Left{
-    width: 50%;
+    width: 70%;
     height: auto;
-    background-color: red;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-right: 20px;
 }
+
+.card1Welcome{
+    color: rgba(255, 213, 0, 0.767);
+    padding-top: 10px;
+    padding-bottom: 5px;
+    font-size: 80px;
+    font-weight: 900;
+     font-family: "Montserrat", sans-serif;
+}
+
+.card1Name{
+    color: rgb(47, 135, 250);
+    padding-bottom: 30px;
+    font-weight: 700;
+    font-size: 40px;
+    font-family: "Montserrat", sans-serif;
+}
+.card1Message{
+    color: rgba(255, 255, 255, 0.744);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+      font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+}
+
+
 
 .card1Right{
-    width: 50%;
+    width: 30%;
     height: auto;
-    background-color: green;
-}
-
-.progressBar{
-    background-color: blue;
-    font-weight: 900;
-   
-    overflow: hidden;
-}
-
-.progressBar {
-    width: 200px;
-    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.progressBar svg {
-    width: 100%;
+.imgContainer{
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10000000px 1px rgb(152, 6, 6,0.5);
+    transition: 0.2s ease-out;
+
+}
+
+.imgContainer:hover{
+    box-shadow: 0px 0px 10000000px 1px  rgb(152, 6, 6,0.3);
+}
+
+img{
     height: 100%;
-    display: block;
+    width: 100%;
+    object-fit: cover;
+     image-rendering: auto;
+}
+
+
+@media(max-width:1100px){
+    .userInfoCard{
+        flex-direction: column;
+    }
+
+    .card1Left{
+    width: 100%;
+    height: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-right: 0px;
+}
+
+
+
+.card1Right{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 60px;
+}
+
+}
+
+
+
+@media(max-width:900px){
+    .userInfoCard{
+        flex-direction: column;
+        padding-left: 5vh;
+        padding-right: 5vh;
+    }
+
+    
+.card1Welcome{
+    font-size: 60px;
+    font-weight: 900;
+     font-family: "Montserrat", sans-serif;
+}
+
+}
+
+
+
+
+@media(max-width:600px){
+    .userInfoCard{
+        flex-direction: column;
+        padding-left: 3vh;
+        padding-right: 3vh;
+    }
+
+    
+.card1Welcome{
+    font-size: 40px;
+    font-weight: 900;
+     font-family: "Montserrat", sans-serif;
+}
+
+.card1Name{
+    font-size: 20px;
+}
+
+.card1Message{
+    font-size: 15px;
+      font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+
+
+.imgContainer{
+    height: 200px;
+    width: 200px;
+    transition: 0.2s ease-out;
+
+}
+
 }
