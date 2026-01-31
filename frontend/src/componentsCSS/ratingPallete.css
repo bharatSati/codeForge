@@ -16,6 +16,7 @@
    border-radius: 15px;
   border: 1.5px solid rgba(255, 255, 255, 0.226);
   contain: paint;
+  background-color: rgb(15, 14, 14);
 }
 
 .ratingPalleteHeading{
@@ -34,7 +35,6 @@
     height: auto;
     width: auto;
     display: flex;
-    flex: 1;
     flex-direction: column;
     padding: 15px;
 }

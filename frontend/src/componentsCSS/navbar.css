@@ -4,6 +4,11 @@
     padding: 0px;
 }
 
+
+a{
+    text-decoration: none;
+}
+
 .navbar{
     height: 10vh;
     width: 100%;
@@ -12,5 +17,106 @@
     position: fixed;
     left: 0px;
     top: 0px;
-    z-index: 1;
+    z-index: 2;
+    padding: 10px;
+    display: flex;
+}
+
+.branding{
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+       font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-size: 30px;
+  cursor: pointer;
+  color: white
+}
+
+.navBarButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 18px;
+    font-weight: 800;
+     font-family: "Montserrat", sans-serif;
+     color: rgba(255, 255, 255, 0.7);
+     transition: 0.3s ease-out;
+     cursor: pointer;
+    
+}
+
+.navBarButton:hover{
+     color: rgb(47, 67, 251);
+
+}
+
+
+.fullMenuButton{
+    padding-right: 20px;
+    display: none;
+    align-items: center;
+    transition: 0.3s ease-in-out;
+
+}
+
+.fullMenuButton img{
+    height:40px;
+    width: 40px;
+}
+
+@media(max-width:800px){
+    .navBarButton{
+        display: none;
+    }
+
+    .fullMenuButton{
+        display: flex;
+    }
+}
+
+
+.verticalMenu{
+    display: none;
+    height: 50vh;
+    width: 200px;
+    position: fixed;
+    right: 8vh;
+    top: 10vh;
+    border-radius: 10px;
+    transition: 0.3s step-end;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    padding: 10px;
+    padding-top: 20px;
+    background-color: rgba(35, 33, 33, 0.788);
+    backdrop-filter: blur(10px);
+    border: 1px solid white;
+    z-index: 2;
+
+}
+
+.verticalBarButton{
+    padding: 10px;
+    padding-bottom: 5px;
+    font-size: 18px;
+     font-weight: 800;
+     font-family: "Montserrat", sans-serif;
+     color: rgba(255, 255, 255, 0.7);
+     transition: 0.3s ease-out;
+     cursor: pointer;
+
+}
+
+
+.verticalBarButton:hover{
+    color: rgb(47, 67, 251);
+
 }

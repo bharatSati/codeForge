@@ -68,6 +68,7 @@
 }
 
 .problemRow{
+    background-color: rgb(15, 14, 14);
     overflow: hidden;
     font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;

@@ -24,6 +24,7 @@
   padding: 20px;
   font-weight: 900;
   text-align: center;
+  background-color: rgb(15, 14, 14);
 }
 
 @media(max-width: 500px){

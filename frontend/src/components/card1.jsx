@@ -7,7 +7,7 @@ export default function Card1({content , avatar , user}){
                <div className="card1Left">
                 <div className="card1Welcome">W E L C O M E</div>
                 <div className="card1Name">{user}</div>
-                <div className="card1Message">{content}</div>
+                <div className="card1Message" style={{ whiteSpace: "pre-wrap" }}>{content}</div>
             </div>
                
                <div className="card1Right">

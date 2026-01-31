@@ -7,7 +7,7 @@ const model = ai.getGenerativeModel({
 })
 
 
-// ---------- HELPERS ----------
+
 function prettyVerdict(v) {
   if (!v) return "";
   return v
@@ -21,7 +21,7 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// ---------- RATING ANALYSIS ----------
+
 function analyzeRatingExpanded(rating, verdictRow, verdictTypes) {
   let totalSubs = 0;
   let totalPassed = 0;
@@ -67,7 +67,7 @@ Problems at this rating normally require structured observations and constraint-
 
     const cnt = v.verdictCount;
     const passed = v.totalPassedTestCases || 0;
-    // fixed average calculation
+   
     const avg = cnt > 0 ? (passed / cnt).toFixed(2) : "0.00";
 
     const name = prettyVerdict(verdictTypes[i]);
@@ -88,7 +88,7 @@ Problems at this rating normally require structured observations and constraint-
   };
 }
 
-// ---------- OVERALL SUMMARY ----------
+
 function buildOverallExpanded(data) {
   let totalAll = 0;
   const verdictTotals = {};
@@ -124,7 +124,7 @@ ${parts.map((p, i) => `${i + 1}. ${p}`).join("\n")}
   `.trim();
 }
 
-// ---------- FINAL ANALYSIS GENERATOR ----------
+
 function generateAnalysisExpanded(data) {
   const ratingAnalysis = [];
 
@@ -138,13 +138,6 @@ function generateAnalysisExpanded(data) {
     ratingAnalysis
   ];
 }
-
-// ---------- USAGE ----------
-// const result = generateAnalysisExpanded(data);
-// console.log(JSON.stringify(result, null, 2));
-
-// In React, render like:
-// <div style={{ whiteSpace: "pre-wrap" }}>{content}</div>
 
 
 
