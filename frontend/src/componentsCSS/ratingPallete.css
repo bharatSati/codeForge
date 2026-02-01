@@ -51,7 +51,7 @@
 
 .ratingBox{
     height: auto;
-    width: 10%;
+    width: auto;
     min-width: 50px;
     display: flex;
     align-items: center;
@@ -65,13 +65,15 @@
     cursor: pointer;
     border: 1.5px solid rgba(139, 255, 62, 0.406);
     transition: 0.3s ease-out;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 
 .ratingBoxSelected{
     background-color: rgba(130, 255, 130, 0.219);
     height: auto;
-    width: 10%;
+    width: auto;
     min-width: 50px;
     display: flex;
     align-items: center;
@@ -84,6 +86,8 @@
     font-size: 15px;
     cursor: pointer;
      transition: 0.3s ease-out;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 

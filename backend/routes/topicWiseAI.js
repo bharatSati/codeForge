@@ -7,121 +7,114 @@ const model = ai.getGenerativeModel({
 })
 
 
-function prettyVerdict(v) {
-  if (!v) return "";
-  return v
-    .toLowerCase()
-    .split("_")
-    .map(w => w[0].toUpperCase() + w.slice(1))
-    .join(" ");
-}
+let topicArray = ["implementation","math","brute force","sortings","binary search","two pointers","strings","bit manipulation","greedy","data structures","number theory","combinatorics","graphs","trees","dp","constructive algorithms","game theory","probabilities","geometry","interactive"];
+function generateTopicConclusions(data) {
+  const verdicts = data.verdict;
+  const topics = data.topicArray;
+  const topicWise = data.verdictTopicWise;
+  const user = data.userProfileData.user;
 
-function analyzeTopic(topic, verdictRow, verdictTypes, globalAvg) {
   let totalSubs = 0;
-  let weightedAvgPassed = 0;
-  let dominantVerdict = null;
-  let dominantCount = 0;
+  const topicAnalysis = [];
+  const stats = [];
 
-  verdictRow.forEach((v, i) => {
-    const cnt = v.verdictCount || 0;
-    const avg = v.avgPassedTestCases || 0;
+  // -------- COLLECT STATS PER TOPIC --------
+  for (let t = 0; t < topics.length; t++) {
+    const row = topicWise[t] || [];
+    let subs = 0, passed = 0;
+    let domVerdict = null, domCnt = 0;
 
-    totalSubs += cnt;
-    weightedAvgPassed += cnt * avg;
+    row.forEach((v, i) => {
+      const cnt = v.verdictCount;
+      const p = v.totalPassedTestCases;
+      subs += cnt;
+      passed += p;
+      if (cnt > domCnt) {
+        domCnt = cnt;
+        domVerdict = verdicts[i];
+      }
+    });
 
-    if (cnt > dominantCount) {
-      dominantCount = cnt;
-      dominantVerdict = verdictTypes[i];
+    totalSubs += subs;
+
+    stats.push({
+      topic: topics[t],
+      subs,
+      avg: subs ? passed / subs : 0,
+      domVerdict
+    });
+  }
+
+  // -------- IDENTIFY STRONG / WEAK TOPICS --------
+  let strong = [];
+  let weak = [];
+
+  for (const s of stats) {
+    if (!s.subs) continue;
+    if (s.avg >= 6) strong.push(s.topic);
+    if (s.avg <= 2) weak.push(s.topic);
+  }
+
+  // -------- OVERALL ANALYSIS --------
+  const overall =
+`${user}, here is a structured breakdown of your performance across different topics, based strictly on submission behavior and test case progression.
+
+• A total of ${totalSubs} non-accepted submissions were analyzed, giving a broad view of how your solutions evolve across topics.
+• Topics like ${strong.slice(0, 3).join(", ") || "a limited set"} stand out as relative strengths, where higher average passed test cases indicate that your core logic is usually correct.
+• On the other hand, ${weak.slice(0, 3).join(", ") || "some topics"} repeatedly fail early, suggesting gaps in problem modeling or approach selection.
+• This contrast points to uneven conceptual confidence rather than a lack of effort.
+• Targeting weaker topics—starting with lower difficulty problems—will likely yield the fastest overall improvement.`;
+
+
+  // -------- PER-TOPIC ANALYSIS --------
+  stats.forEach(s => {
+    if (!s.subs) {
+      topicAnalysis.push({
+        topic: s.topic,
+        analysis:
+          "• No non-accepted submissions were recorded for this topic.\n" +
+          "• This usually indicates either no attempts or deliberate avoidance.\n" +
+          "• As a result, there is insufficient data to draw reliable conclusions here."
+      });
+      return;
     }
+
+    let implication = "";
+    let advice = "";
+
+    if (s.avg >= 6) {
+      implication =
+        "solutions generally reach the later test cases, meaning the main idea is correct but tends to fail on edge cases, limits, or implementation details.";
+      advice =
+        "Shift focus toward stress testing, corner cases, and tighter constraint handling in this topic.";
+    } else if (s.avg >= 3) {
+      implication =
+        "solutions show partial correctness, often driven by the right intuition but missing a key observation or transition.";
+      advice =
+        "Slow down before coding—aim to fully reconstruct the editorial logic in your head.";
+    } else {
+      implication =
+        "most solutions fail very early, which points to weak conceptual grounding or incorrect approach selection.";
+      advice =
+        "Revisit fundamentals and solve simpler, well-known patterns before attempting harder problems here.";
+    }
+
+    topicAnalysis.push({
+      topic: s.topic,
+      analysis:
+        `• Dominant verdict type: ${s.domVerdict}, indicating the most frequent failure pattern.\n` +
+        `• Average passed test cases per submission: ${s.avg.toFixed(2)}, reflecting how far solutions typically progress.\n` +
+        `• Interpretation: Your submissions in this topic tend to fail due to ${implication}\n` +
+        `• This topic rewards strong pattern recognition, clean modeling, and careful handling of constraints.\n` +
+        `• Actionable advice: ${advice}`
+    });
   });
 
-  if (totalSubs === 0) {
-    return [
-      `Topic: ${topic}`,
-      `• No non-accepted submissions are recorded.`,
-      `• Insufficient data to infer conceptual or implementation weaknesses.`,
-      `• More attempts are required to evaluate approach quality and consistency.`
-    ].join("\n");
-  }
-
-  const topicAvg = weightedAvgPassed / totalSubs;
-  const verdictName = prettyVerdict(dominantVerdict);
-
-  let diagnosis;
-  if (topicAvg < globalAvg * 0.7) {
-    diagnosis =
-      "Failures occur much earlier than your overall average, indicating incorrect approach selection, weak fundamentals, or misunderstanding of constraints.";
-  } else if (topicAvg > globalAvg * 1.2) {
-    diagnosis =
-      "Most solutions reach late test cases, pointing to edge-case oversights, boundary condition failures, or missed optimizations.";
-  } else {
-    diagnosis =
-      "Failures occur at an average stage, suggesting unstable logic and inconsistent implementation rather than a single clear gap.";
-  }
-
   return [
-    `Topic: ${topic}`,
-    `1. Total non-accepted submissions: ${totalSubs}`,
-    `2. Dominant verdict: ${verdictName} (${dominantCount} cases, ${(dominantCount / totalSubs * 100).toFixed(1)}%)`,
-    `3. Average passed test cases per attempt: ${topicAvg.toFixed(2)} (global average: ${globalAvg.toFixed(2)})`,
-    `4. Interpretation: ${diagnosis}`,
-    `5. Improvement focus: Strengthen dry-run discipline, explicitly list edge cases before coding, and validate time/space complexity against worst-case constraints.`
-  ].join("\n");
-}
-
-function buildOverallAssessment(data) {
-  let totalSubs = 0;
-  let weightedAvg = 0;
-  let verdictTotals = {};
-
-  data.verdictArray.forEach((v, i) => {
-    const cnt = v.verdictCount || 0;
-    const avg = v.avgPassedTestCases || 0;
-
-    totalSubs += cnt;
-    weightedAvg += cnt * avg;
-    verdictTotals[data.verdict[i]] = cnt;
-  });
-
-  const globalAvg = weightedAvg / totalSubs;
-  const [domVerdict, domCount] =
-    Object.entries(verdictTotals).sort((a, b) => b[1] - a[1])[0] || [];
-
-  const user = data.userProfileData.user || "User";
-
-  const assessment = [
-    `${user} — Overall Assessment`,
-    `1. Total non-accepted submissions: ${totalSubs}`,
-    `2. Dominant failure type: ${prettyVerdict(domVerdict)} (${domCount} cases, ${(domCount / totalSubs * 100).toFixed(1)}%)`,
-    `3. Average passed test cases per submission: ${globalAvg.toFixed(2)}`,
-    `4. Failure stage analysis: Most failures occur after partial progress, indicating that ideas often work initially but break on edge cases or constraints.`,
-    `5. Cross-topic consistency: Performance varies significantly across topics, showing uneven conceptual depth rather than a uniform skill level.`,
-    `6. Coding habit inference: There is reliance on assumption-driven logic with insufficient validation against extreme cases.`,
-    `7. Strategy recommendation: Prioritize approach verification before coding, simulate edge cases manually, and reject solutions that barely meet constraints.`
-  ].join("\n");
-
-  return { assessment, globalAvg };
-}
-
-function generateAnalysisExpanded(data) {
-  const { assessment, globalAvg } = buildOverallAssessment(data);
-
-  const topicAnalysis = data.topicArray.map((topic, i) =>
-    analyzeTopic(
-      topic,
-      data.verdictTopicWise[i] || [],
-      data.verdict,
-      globalAvg
-    )
-  );
-
-  return [
-    assessment,
+    overall,
     topicAnalysis
   ];
 }
-
-
 
 
 async function responseGenerator(data){   
@@ -202,7 +195,7 @@ async function responseGenerator(data){
         console.log(aiResponse)
     }
     catch(error){ 
-         aiResponse = JSON.stringify( generateAnalysisExpanded(data));
+         aiResponse = JSON.stringify( generateTopicConclusions(data));
 
 
     }

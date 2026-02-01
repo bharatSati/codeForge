@@ -11,9 +11,9 @@ export default function Navbar(){
     return(
         <>
         <div className="navbar">
-            <div className="branding" onClick = {()=>navigate("/")}>CodeForge</div>
-            <div className="navBarButton" onClick = {()=>navigate("/ratedSheet")}>EPSILON</div>
-            <div className="navBarButton" onClick = {()=>navigate("/topcSheet")}>DELTA</div>
+            <div className="branding" onClick = {()=>navigate("/")}>Code <span style = { {fontWeight: 1000, color : 'rgb(255, 69, 0)'}}>  Forge</span></div>
+            <div className="navBarButton" onClick = {()=>navigate("/epsilon")}>EPSILON</div>
+            <div className="navBarButton" onClick = {()=>navigate("/delta")}>DELTA</div>
             <a className="navBarButton" href= 'https://www.linkedin.com/in/bharatsati/' target="_blank" rel="noopener noreferrer">CONTACT ME</a>
             <div className="fullMenuButton" onClick = {()=>setMenu(!menu)}><img src={ menu ? Menu:Close} alt="" /></div>
         </div>

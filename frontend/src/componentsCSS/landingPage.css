@@ -1,0 +1,134 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.landingPage{
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+}
+
+.codeForgeBox{
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 1000;
+    font-size: 150px;
+    height: 50vh;
+    padding-top: 30vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0px 0px 1px white;
+    transition: 0.5s ease-out;
+}
+.forge{
+    transition: 0.3s ease-out;
+    color:#ff0000;
+    text-shadow: 0px 0px 1px #ff0000;
+}
+
+.codeForgeBox:hover{
+    color:#ff0000;
+    .forge{
+        color: white;
+}
+
+
+
+}
+
+
+.tagline{
+    height: auto;
+    padding-left: 20%;
+    padding-right: 20%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.744);
+     font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-size: 22px;
+  padding-top: 5vh;
+}
+
+.epsilonDeltaText{
+    display: inline-block;
+    color: rgb(0, 85, 255);
+    font-weight: 1000;
+}
+
+.epsilonDeltaContainer{
+    padding-top: 8vh;
+    height: auto;
+    width: 100%;
+    padding-left: 35%;
+    padding-right: 35%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.epsilonDeltaButton{
+    height: auto;
+    width: auto;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: rgba(255, 255, 255, 0.427);
+    border: 1px solid white;
+    box-shadow: 0px 0px 5px 0px white;
+    border-radius: 20px;
+      font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(24, 24, 24);
+}
+
+.naam{
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    font-weight: 1000;
+    padding-bottom: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.kaam{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media(max-width: 1250px){
+    .codeForgeBox{
+        font-size: 100px;
+    }
+}
+
+@media(max-width: 800px){
+    .codeForgeBox{
+        font-size: 80px;
+    }
+}
+
+
+@media(max-width: 600px){
+    .codeForgeBox{
+        font-size: 60px;
+    }
+}
+
+
+
+@media(max-width: 450px){
+    .codeForgeBox{
+        font-size: 50px;
+    }
+}

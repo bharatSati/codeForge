@@ -1,14 +1,19 @@
 import "../componentsCSS/info.css"
 import  Navbar  from '../components/navbar.jsx'
 import { useState , useContext  } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { RatedDataContext } from "../context/ratedDataContext.jsx";
+import { TopicDataContext } from "../context/topicDataContext.jsx";
 import axios from "axios";
 
 export default function Info(){
     let navigate = useNavigate();
+    let location = useLocation();
+    let params = new URLSearchParams(location.search);
+    const flag = params.get("flag") === "true";
     const { setRatedData } = useContext(RatedDataContext);
+    const { setTopicData } = useContext(TopicDataContext);
     const [user,setUser] = useState("");
     const [friend,setFriend] = useState("");
     const [loading,setLoading] = useState(false);
@@ -22,12 +27,23 @@ export default function Info(){
         let result;
         try {
             console.log(user)
-            result = await axios.get(`http://localhost:3000/ratedQuestions/${user}/${friend}`);
-            setRatedData(result.data);
+            result = (flag) ? 
+                        await axios.get(`http://localhost:3000/ratedQuestions/${user}/${friend}`)
+                    :
+                        await axios.get(`http://localhost:3000/topicWiseCF/${user}/${friend}`);
             console.log(result);
-            navigate("/ratedSheet");
+            toast.success("Sheet Generated Successfully");
+            if(flag){
+                setRatedData(result.data);
+                navigate("/epsilon");}
+            else{
+                setTopicData(result.data);
+                navigate("/delta");}
         }
-        catch(error){ toast.error(error.response.data.message); }
+        catch(error){ 
+            if(error.response.data.message) toast.error(error.response.data.message);
+            else toast.error("Server Error");
+        }
         setLoading(false);
     }
      

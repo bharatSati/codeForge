@@ -7,138 +7,100 @@ const model = ai.getGenerativeModel({
 })
 
 
+function generateRatingConclusions(data) {
+  const verdicts = data.verdict;
+  const ratingWise = data.verdictRatingWise;
+  const user = data.userProfileData.user;
+  const maxRating = data.userProfileData.maxRating;
 
-function prettyVerdict(v) {
-  if (!v) return "";
-  return v
-    .toLowerCase()
-    .split("_")
-    .map(w => w[0].toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-
-function analyzeRatingExpanded(rating, verdictRow, verdictTypes) {
   let totalSubs = 0;
-  let totalPassed = 0;
-  let dominantVerdict = null;
-  let dominantCount = 0;
+  const ratingAnalysis = [];
+  const stats = [];
 
-  verdictRow.forEach((v, i) => {
-    const cnt = v.verdictCount || 0;
-    const passed = v.totalPassedTestCases || 0;
+  // Collect stats
+  for (let r = 8; r <= 35; r++) {
+    const row = ratingWise[r] || [];
+    let subs = 0, passed = 0;
+    let domVerdict = null, domCnt = 0;
 
-    totalSubs += cnt;
-    totalPassed += passed;
-
-    if (cnt > dominantCount) {
-      dominantCount = cnt;
-      dominantVerdict = verdictTypes[i];
-    }
-  });
-
-  if (totalSubs === 0) {
-    return {
-      rating,
-      analysis: `
-Rating ${rating} Overview
-
-No non-accepted submissions were recorded at this rating.
-There is no verdict distribution or passed-test information available to summarize.
-Problems at this rating normally require structured observations and constraint-aware solutions. Add attempts here to establish a baseline for higher ratings.
-      `.trim()
-    };
-  }
-
-  let lines = [];
-
-  lines.push(`Rating ${rating} Overview\n`);
-  lines.push(`1. Total non-accepted submissions: ${totalSubs}`);
-  lines.push(`2. Total passed test cases across all attempts: ${totalPassed}\n`);
-  lines.push(`Verdict-wise breakdown:`);
-
-  let idx = 1;
-  verdictRow.forEach((v, i) => {
-    if (!v.verdictCount) return;
-
-    const cnt = v.verdictCount;
-    const passed = v.totalPassedTestCases || 0;
-   
-    const avg = cnt > 0 ? (passed / cnt).toFixed(2) : "0.00";
-
-    const name = prettyVerdict(verdictTypes[i]);
-
-    lines.push(`${idx}. ${name} occurred ${cnt} times, contributing ${passed} passed test cases, averaging about ${avg} passed tests per submission.`);
-    idx++;
-  });
-
-  lines.push(``);
-  if (dominantVerdict) {
-    const name = prettyVerdict(dominantVerdict);
-    lines.push(`Among all verdicts at rating ${rating}, ${name} appears most frequently (${dominantCount} times) and is the primary failure type at this rating.`);
-  }
-
-  return {
-    rating,
-    analysis: lines.join("\n")
-  };
-}
-
-
-function buildOverallExpanded(data) {
-  let totalAll = 0;
-  const verdictTotals = {};
-
-  for (let r = 0; r < data.verdictRatingWise.length; r++) {
-    const row = data.verdictRatingWise[r] || [];
     row.forEach((v, i) => {
-      const cnt = v.verdictCount || 0;
-      totalAll += cnt;
-      if (!verdictTotals[i]) verdictTotals[i] = 0;
-      verdictTotals[i] += cnt;
+      const cnt = v.verdictCount;
+      const p = v.totalPassedTestCases;
+      subs += cnt;
+      passed += p;
+      if (cnt > domCnt) {
+        domCnt = cnt;
+        domVerdict = verdicts[i];
+      }
+    });
+
+    totalSubs += subs;
+
+    stats.push({
+      rating: r * 100,
+      subs,
+      avg: subs ? passed / subs : 0,
+      domVerdict
     });
   }
 
-  const parts = [];
-  Object.entries(verdictTotals).forEach(([i, cnt]) => {
-    if (cnt > 0) {
-      const name = prettyVerdict(data.verdict[i]);
-      parts.push(`${name} contributes ${cnt} non-accepted submissions across all ratings.`);
-    }
-  });
+  // Identify zones
+  let comfort = 0;
+  let breakdown = 0;
 
-  const user = data.userProfileData.user || "User";
-
-  return `
-${user}, your problem-solving data has been compiled. Explore your strengths, trends, and improvement areas.
-
-Across all rated problems, there are ${totalAll} non-accepted submissions recorded.
-
-Overall verdict activity across ratings:
-
-${parts.map((p, i) => `${i + 1}. ${p}`).join("\n")}
-  `.trim();
-}
-
-
-function generateAnalysisExpanded(data) {
-  const ratingAnalysis = [];
-
-  for (let r = 8; r <= 35; r++) {
-    const row = data.verdictRatingWise[r] || [];
-    ratingAnalysis.push(analyzeRatingExpanded(r * 100, row, data.verdict));
+  for (const s of stats) {
+    if (!s.subs) continue;
+    if (s.avg >= 6) comfort = s.rating;
+    if (!breakdown && s.avg <= 2) breakdown = s.rating;
   }
 
+  // Overall (≤ 80 words)
+  const overall = `${user}, your problem-solving data has been compiled. Explore your strengths, trends, and improvement areas.
+
+• ${totalSubs} non-accepted rated submissions analyzed.
+• Stable performance up to ${comfort || "lower ratings"}, where higher passed test averages indicate near-correct solutions.
+• Sharp efficiency drop around ${breakdown || "mid ratings"}, showing early-test failures.
+• This marks your current skill ceiling near ${comfort || maxRating}.
+• Attempts beyond this range yield low return.
+• Best improvement lies just below the ceiling by converting partial passes into ACs.`;
+
+  // Per-rating analysis (≤ 80 words each)
+  stats.forEach(s => {
+    if (!s.subs) {
+      ratingAnalysis.push({
+        rating: s.rating,
+        analysis:
+          "• No non-accepted submissions recorded.\n" +
+          "• Either no attempts or full avoidance.\n" +
+          "• Insufficient data to infer weaknesses."
+      });
+      return;
+    }
+
+    let implication = "";
+    if (s.avg >= 6)
+      implication = "late-stage failure indicating edge-case or optimization issues.";
+    else if (s.avg >= 3)
+      implication = "partial solution depth with missing transitions or constraints.";
+    else
+      implication = "early failure indicating incorrect modeling or brute-force thinking.";
+
+    ratingAnalysis.push({
+      rating: s.rating,
+      analysis:
+        `• Dominant verdict: ${s.domVerdict}.\n` +
+        `• Average passed tests per submission: ${s.avg.toFixed(2)}.\n` +
+        `• This reflects ${implication}\n` +
+        `• Problems here demand stronger observations and complexity control.\n` +
+        `• Improve by re-solving similar-rated problems until full AC without relying on partial passes.`
+    });
+  });
+
   return [
-    buildOverallExpanded(data),
+    overall,
     ratingAnalysis
   ];
 }
-
 
 
 async function responseGenerator(data){   
@@ -247,7 +209,7 @@ Do NOT hallucinate topics, techniques, or unseen data.`;
         console.log(aiResponse)
     }
     catch(error){ 
-        aiResponse = JSON.stringify( generateAnalysisExpanded(data));
+        aiResponse = JSON.stringify( generateRatingConclusions(data));
 
     }
     return aiResponse;

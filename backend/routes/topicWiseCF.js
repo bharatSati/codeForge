@@ -204,12 +204,15 @@ router.get('/:user/:tutor',async (req,res)=>{
         verdictTopicWise
     }
     
-    let aiData
+     let aiData
     try{ aiData = await ai(dataForAi) }
     catch(error) {aiData = error}
-   
 
-    res.status(200).json({type:1,aiData,verdict,verdictArray,userCompleted,total,topicArray,questionArray,verdictTopicWise}); 
+    const badText = aiData;
+    const cleanedText = badText.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+
+    res.status(200).json({type:1,avatar:response.data.result[0].titlePhoto,user,parsed,userCompleted,total,questionArray}); 
         })
 
     
