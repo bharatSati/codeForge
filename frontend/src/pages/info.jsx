@@ -1,6 +1,6 @@
 import "../componentsCSS/info.css"
 import  Navbar  from '../components/navbar.jsx'
-import { useState , useContext  } from 'react'
+import { useState , useContext , useEffect } from 'react'
 import { useNavigate , useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { RatedDataContext } from "../context/ratedDataContext.jsx";
@@ -17,6 +17,10 @@ export default function Info(){
     const [user,setUser] = useState("");
     const [friend,setFriend] = useState("");
     const [loading,setLoading] = useState(false);
+    let friendQuery = params.get("friend") 
+    useEffect(()=>{
+        if(friendQuery) setFriend(friendQuery);
+    },[friendQuery])
 
     let handleSubmit = async (user,friend)=>{
         setLoading(true);
@@ -56,7 +60,7 @@ export default function Info(){
             <div className="infoUserAcc">User CF Handle</div>
             <input type="text" className = "infoInput1" onChange={(e)=>setUser(e.target.value)} />
             <div className="infoFriendAcc">Friend CF Handle</div>
-            <input type="text" className = "infoInput1" onChange={(e)=>setFriend(e.target.value)}/>
+            <input type="text" value = {friend} className = "infoInput1" onChange={(e)=>setFriend(e.target.value)}/>
             <div className={`${!loading ? "infoSubmitButton":"infoSubmitButtonLoading"}`} onClick={()=>handleSubmit(user,friend)}>{loading ? "WORKING...":"SUBMIT"}</div>
         </div>
         </>

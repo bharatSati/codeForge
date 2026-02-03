@@ -9,6 +9,7 @@ import  QuestionPallete  from '../components/questionPallete.jsx'
 import  Card1  from '../components/card1.jsx'
 import  Navbar  from '../components/navbar.jsx'
 import  AdviceBox  from '../components/adviceBox.jsx'
+import  SelectRandom  from '../components/selectRandom.jsx'
 import { toast } from "react-toastify"
 
 export default function RatingWiseRoute({flag}){
@@ -62,6 +63,9 @@ export default function RatingWiseRoute({flag}){
             })
             
         }
+
+
+        <div className="paddingManager"><SelectRandom></SelectRandom></div>
               
         </div>
     )
