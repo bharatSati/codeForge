@@ -93,8 +93,8 @@ router.get('/:user/:tutor',async (req,res)=>{
                                 break;
                             }
                         }
-                    }
                     break;
+                    }
                 }
                 }
             continue;
@@ -157,7 +157,7 @@ router.get('/:user/:tutor',async (req,res)=>{
             tags: tutorData[i].problem.tags,
             question: tutorData[i].problem.name,
             rating: Number(tutorData[i].problem.rating),
-            solution: (tutorData[i].verdict==="OK") ? tutorData[i].id:`${tutor} has no correct submission for this problem`,
+            solution: tutorData[i].id,
             correctAttempt: 0,
             incorrectAttempt: 0,
         });

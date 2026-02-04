@@ -2,7 +2,6 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
-    color: white;
 }
 
 
@@ -17,6 +16,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.226);
   contain: paint;
   background-color: rgb(15, 14, 14);
+  color: white;
 }
 
 .ratingPalleteHeading{

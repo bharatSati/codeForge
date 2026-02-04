@@ -6,7 +6,7 @@ const model = ai.getGenerativeModel({
     model:"gemini-2.5-flash",
 })
 
-
+// this analysis is made using ai using the data collected
 function generateRatingConclusions(data) {
   const verdicts = data.verdict;
   const ratingWise = data.verdictRatingWise;
@@ -17,7 +17,7 @@ function generateRatingConclusions(data) {
   const ratingAnalysis = [];
   const stats = [];
 
-  // Collect stats
+
   for (let r = 8; r <= 35; r++) {
     const row = ratingWise[r] || [];
     let subs = 0, passed = 0;
@@ -44,7 +44,7 @@ function generateRatingConclusions(data) {
     });
   }
 
-  // Identify zones
+  
   let comfort = 0;
   let breakdown = 0;
 
@@ -54,45 +54,45 @@ function generateRatingConclusions(data) {
     if (!breakdown && s.avg <= 2) breakdown = s.rating;
   }
 
-  // Overall (≤ 80 words)
-  const overall = `${user}, your problem-solving data has been compiled. Explore your strengths, trends, and improvement areas.
+  
+  const overall = `${user}, your problem-solving data has been compiled to highlight strengths, patterns, and improvement areas.
 
-• ${totalSubs} non-accepted rated submissions analyzed.
-• Stable performance up to ${comfort || "lower ratings"}, where higher passed test averages indicate near-correct solutions.
-• Sharp efficiency drop around ${breakdown || "mid ratings"}, showing early-test failures.
-• This marks your current skill ceiling near ${comfort || maxRating}.
-• Attempts beyond this range yield low return.
-• Best improvement lies just below the ceiling by converting partial passes into ACs.`;
+1. A total of ${totalSubs} non-accepted rated submissions were analyzed to understand your solving behavior.
+2. Your performance remains stable up to ${comfort || "lower ratings"}, where higher average passed tests indicate near-correct solutions.
+3. A sharp efficiency drop appears around ${breakdown || "mid ratings"}, pointing to failures in early test cases.
+4. This trend suggests your current skill ceiling lies near ${comfort || maxRating}.
+5. Attempts beyond this range currently produce low returns relative to effort.
+6. The strongest improvement opportunity lies just below this ceiling by converting partial passes into full ACs.`;
 
-  // Per-rating analysis (≤ 80 words each)
+  
   stats.forEach(s => {
     if (!s.subs) {
       ratingAnalysis.push({
         rating: s.rating,
         analysis:
-          "• No non-accepted submissions recorded.\n" +
-          "• Either no attempts or full avoidance.\n" +
-          "• Insufficient data to infer weaknesses."
+          `1. No non-accepted submissions were recorded at this rating.
+2. This indicates either no attempts or complete avoidance of problems in this range.
+3. Due to insufficient data, no specific weaknesses can be inferred here.`
       });
       return;
     }
 
     let implication = "";
     if (s.avg >= 6)
-      implication = "late-stage failure indicating edge-case or optimization issues.";
+      implication = "late-stage failures, usually caused by edge cases or minor optimization gaps.";
     else if (s.avg >= 3)
-      implication = "partial solution depth with missing transitions or constraints.";
+      implication = "partial solution depth with missing transitions, conditions, or constraints.";
     else
-      implication = "early failure indicating incorrect modeling or brute-force thinking.";
+      implication = "early failures caused by incorrect modeling, assumptions, or brute-force thinking.";
 
     ratingAnalysis.push({
       rating: s.rating,
       analysis:
-        `• Dominant verdict: ${s.domVerdict}.\n` +
-        `• Average passed tests per submission: ${s.avg.toFixed(2)}.\n` +
-        `• This reflects ${implication}\n` +
-        `• Problems here demand stronger observations and complexity control.\n` +
-        `• Improve by re-solving similar-rated problems until full AC without relying on partial passes.`
+        `1. The dominant verdict at this rating is ${s.domVerdict}.
+2. The average number of passed test cases per submission is ${s.avg.toFixed(2)}.
+3. This behavior reflects ${implication}
+4. Problems at this level demand stronger observations and tighter control over complexity.
+5. Consistent improvement comes from re-solving similar-rated problems until full AC is achieved without relying on partial passes.`
     });
   });
 

@@ -8,6 +8,8 @@ const model = ai.getGenerativeModel({
 
 
 let topicArray = ["implementation","math","brute force","sortings","binary search","two pointers","strings","bit manipulation","greedy","data structures","number theory","combinatorics","graphs","trees","dp","constructive algorithms","game theory","probabilities","geometry","interactive"];
+
+// this analysis is made using ai using the data collected
 function generateTopicConclusions(data) {
   const verdicts = data.verdict;
   const topics = data.topicArray;
@@ -18,19 +20,20 @@ function generateTopicConclusions(data) {
   const topicAnalysis = [];
   const stats = [];
 
-  // -------- COLLECT STATS PER TOPIC --------
+  
   for (let t = 0; t < topics.length; t++) {
     const row = topicWise[t] || [];
-    let subs = 0, passed = 0;
-    let domVerdict = null, domCnt = 0;
+    let subs = 0;
+    let passed = 0;
+    let domVerdict = null;
+    let domCnt = 0;
 
     row.forEach((v, i) => {
-      const cnt = v.verdictCount;
-      const p = v.totalPassedTestCases;
-      subs += cnt;
-      passed += p;
-      if (cnt > domCnt) {
-        domCnt = cnt;
+      subs += v.verdictCount;
+      passed += v.totalPassedTestCases;
+
+      if (v.verdictCount > domCnt) {
+        domCnt = v.verdictCount;
         domVerdict = verdicts[i];
       }
     });
@@ -45,9 +48,9 @@ function generateTopicConclusions(data) {
     });
   }
 
-  // -------- IDENTIFY STRONG / WEAK TOPICS --------
-  let strong = [];
-  let weak = [];
+  
+  const strong = [];
+  const weak = [];
 
   for (const s of stats) {
     if (!s.subs) continue;
@@ -55,58 +58,56 @@ function generateTopicConclusions(data) {
     if (s.avg <= 2) weak.push(s.topic);
   }
 
-  // -------- OVERALL ANALYSIS --------
+ 
   const overall =
-`${user}, here is a structured breakdown of your performance across different topics, based strictly on submission behavior and test case progression.
+`${user}, here is a structured evaluation of your topic-wise problem-solving behavior based on non-accepted submissions.
 
-• A total of ${totalSubs} non-accepted submissions were analyzed, giving a broad view of how your solutions evolve across topics.
-• Topics like ${strong.slice(0, 3).join(", ") || "a limited set"} stand out as relative strengths, where higher average passed test cases indicate that your core logic is usually correct.
-• On the other hand, ${weak.slice(0, 3).join(", ") || "some topics"} repeatedly fail early, suggesting gaps in problem modeling or approach selection.
-• This contrast points to uneven conceptual confidence rather than a lack of effort.
-• Targeting weaker topics—starting with lower difficulty problems—will likely yield the fastest overall improvement.`;
+1. A total of ${totalSubs} non-accepted submissions were analyzed across all problem topics.
+2. Topics such as ${strong.slice(0, 3).join(", ") || "a limited set"} demonstrate relative strength, where solutions often reach later test cases.
+3. Topics like ${weak.slice(0, 3).join(", ") || "certain areas"} show early failures, indicating conceptual or modeling gaps.
+4. This uneven distribution suggests topic-specific weaknesses rather than overall inconsistency.
+5. Prioritizing weaker topics at lower difficulty levels is likely to produce the fastest improvement.`;
 
 
-  // -------- PER-TOPIC ANALYSIS --------
   stats.forEach(s => {
     if (!s.subs) {
       topicAnalysis.push({
         topic: s.topic,
         analysis:
-          "• No non-accepted submissions were recorded for this topic.\n" +
-          "• This usually indicates either no attempts or deliberate avoidance.\n" +
-          "• As a result, there is insufficient data to draw reliable conclusions here."
+`1. No non-accepted submissions were recorded for this topic.
+2. This indicates either no attempts or complete avoidance.
+3. As a result, there is insufficient data to draw conclusions here.`
       });
       return;
     }
 
-    let implication = "";
-    let advice = "";
+    let implication, advice;
 
     if (s.avg >= 6) {
       implication =
-        "solutions generally reach the later test cases, meaning the main idea is correct but tends to fail on edge cases, limits, or implementation details.";
+        "solutions usually fail late, meaning the core logic is correct but breaks on edge cases or constraints.";
       advice =
-        "Shift focus toward stress testing, corner cases, and tighter constraint handling in this topic.";
+        "Improve by focusing on boundary conditions, stress testing, and cleaner implementations.";
     } else if (s.avg >= 3) {
       implication =
-        "solutions show partial correctness, often driven by the right intuition but missing a key observation or transition.";
+        "solutions show partial correctness, driven by the right idea but missing a critical observation.";
       advice =
-        "Slow down before coding—aim to fully reconstruct the editorial logic in your head.";
+        "Spend more time validating the complete approach before implementation.";
     } else {
       implication =
-        "most solutions fail very early, which points to weak conceptual grounding or incorrect approach selection.";
+        "solutions fail very early, indicating weak fundamentals or incorrect approach selection.";
       advice =
-        "Revisit fundamentals and solve simpler, well-known patterns before attempting harder problems here.";
+        "Rebuild this topic from basic patterns and easier problems.";
     }
 
     topicAnalysis.push({
       topic: s.topic,
       analysis:
-        `• Dominant verdict type: ${s.domVerdict}, indicating the most frequent failure pattern.\n` +
-        `• Average passed test cases per submission: ${s.avg.toFixed(2)}, reflecting how far solutions typically progress.\n` +
-        `• Interpretation: Your submissions in this topic tend to fail due to ${implication}\n` +
-        `• This topic rewards strong pattern recognition, clean modeling, and careful handling of constraints.\n` +
-        `• Actionable advice: ${advice}`
+`1. The dominant verdict in this topic is ${s.domVerdict}, representing the most common failure type.
+2. The average number of passed test cases per submission is ${s.avg.toFixed(2)}.
+3. This indicates that submissions typically fail because ${implication}
+4. Strong performance in this topic requires solid modeling, pattern recognition, and constraint awareness.
+5. Recommended focus: ${advice}`
     });
   });
 
@@ -115,6 +116,8 @@ function generateTopicConclusions(data) {
     topicAnalysis
   ];
 }
+
+
 
 
 async function responseGenerator(data){   

@@ -18,10 +18,10 @@ export default function Navbar(){
             <div className="fullMenuButton" onClick = {()=>setMenu(!menu)}><img src={ menu ? Menu:Close} alt="" /></div>
         </div>
             <div className="verticalMenu" style = {{display : menu ? "none":"flex"}}>
-                <div className="verticalBarButton">HOME</div>
-                <div className="verticalBarButton">EPSILON</div>
-                <div className="verticalBarButton">DELTA</div>
-                <div className="verticalBarButton">CONTACT ME</div>
+                <div className="verticalBarButton" onClick = {()=>navigate("/")}>HOME</div>
+                <div className="verticalBarButton" onClick = {()=>navigate("/epsilon")}>EPSILON</div>
+                <div className="verticalBarButton"  onClick = {()=>navigate("/delta")}>DELTA</div>
+                <a className="verticalBarButton" href= 'https://www.linkedin.com/in/bharatsati/' target="_blank" rel="noopener noreferrer">CONTACT ME</a>
 
             </div>
         </>  

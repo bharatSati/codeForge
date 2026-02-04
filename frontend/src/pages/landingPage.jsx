@@ -16,12 +16,7 @@ export default function LandingPage(){
         <div className="landingPage">
         <Navbar></Navbar>
         <div className="codeForgeBox">CODE <span className = "forge">FORGE</span> </div>
-        <div className="tagline"> The algorithmic forge where mathematical rigor meets competitive fire, tempering champions through &nbsp;<span className="epsilonDeltaText">EPSILON &nbsp; DELTA</span> &nbsp;proof of concept </div>
-        <div className="epsilonDeltaContainer">
-            {/* <div className="epsilonDeltaButton"><div className="naam">E P S I L O N</div><div className="kaam">Rating Wise</div></div>
-            <div className="epsilonDeltaButton"><div className="naam">D E L T A</div><div className="kaam">Topic Wise</div></div>
-         */}
-        </div>
+        <div className="tagline"> The algorithmic forge where mathematical rigor meets competitive fire, tempering champions through &nbsp;<span className="epsilonDeltaText">EPSILON </span>&nbsp; - rating wise &nbsp;, <span className="epsilonDeltaText">DELTA</span>- topic wise &nbsp;proof of concept </div>
         </div>
     )
 

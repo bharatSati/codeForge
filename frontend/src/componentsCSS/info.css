@@ -33,6 +33,13 @@
     }
 }
 
+@media(max-width:380px){
+    .infoHeading1{
+        font-size: 30px;
+    }
+}
+
+
 .infoUserAcc,.infoFriendAcc{
     font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;

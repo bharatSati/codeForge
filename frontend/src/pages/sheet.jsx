@@ -36,10 +36,24 @@ export default function RatingWiseRoute({flag}){
             <div className="midPalleteRatingWise">
                 <div className="topMidPalleteRatingWise">
                     <div className="ratingPallete1"><RatingPallete flag = {flag} currentRating = {currentRating} setCurrentRating = {setCurrentRating} currentTopic = {currentTopic} setCurrentTopic = {setCurrentTopic}></RatingPallete></div>
-                    <div className="ratingPallete2"><ProgressPallete total = {ratedData?.total || topicData?.total || null} userCompleted = {ratedData?.userCompleted || topicData?.userCompleted || null}></ProgressPallete></div>
+                    <div className="ratingPallete2">
+                    {flag ? 
+                    <ProgressPallete total = {ratedData?.total || null} userCompleted = {ratedData?.userCompleted || null}></ProgressPallete>
+                    :
+                    <ProgressPallete total = {topicData?.total || null} userCompleted = {topicData?.userCompleted || null}></ProgressPallete>
+                           }
+                    </div>    
+                
+                
                 </div>
                 <div className="bottomMidPalleteRatingWise">
-                    <div className="ratingPallete3"><ProgressPallete total = {ratedData?.total || topicData?.total || null} userCompleted = {ratedData?.userCompleted || topicData?.userCompleted || null}></ProgressPallete></div>
+                    <div className="ratingPallete3">
+                     {flag ? 
+                    <ProgressPallete total = {ratedData?.total || null} userCompleted = {ratedData?.userCompleted || null}></ProgressPallete>
+                    :
+                    <ProgressPallete total = {topicData?.total || null} userCompleted = {topicData?.userCompleted || null}></ProgressPallete>
+                           }
+                        </div>
                     {flag ? 
                         <div className="ratingPallete4"><AdviceBox content = {ratedData?.parsed[1][(currentRating-800)/100].analysis || ""}></AdviceBox></div>
                     :
