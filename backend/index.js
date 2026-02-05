@@ -1,6 +1,10 @@
  
  const dotenv = require("dotenv");
  dotenv.config();
+ const mongoose = require("mongoose");
+ mongoose.connect(process.env.DB_CONNECTION)
+ .then(()=>console.log("DB CONNECTED Successfully"))
+ .catch((err)=>console.log(err));
  const express = require("express");
  const app = express();
  const cors = require("cors");
@@ -8,6 +12,7 @@
  const topicWiseCF = require("./routes/topicWiseCF");
  const topicWiseLC = require("./routes/topicWiseLC");
  const port = process.env.PORT
+ 
 
 
 app.use(cors());

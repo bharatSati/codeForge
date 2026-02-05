@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const ai = require("./topicWiseAI");
+const mongoose  = require("mongoose");
 
 
 
@@ -130,6 +131,7 @@ router.get('/:user/:tutor',async (req,res)=>{
         if(!tutorData[i].problem.rating) continue;
         let contest = tutorData[i].problem.contestId;
         let question = tutorData[i].problem.index;
+        if(userHash[contest]==undefined) continue;
         let flag = 1;
         for(let j = 0;j<userHash[contest].length;j++){
             if(userHash[contest][j].question===question){
@@ -211,6 +213,25 @@ router.get('/:user/:tutor',async (req,res)=>{
     const badText = aiData;
     const cleanedText = badText.replace(/```json/g, "").replace(/```/g, "").trim();
     const parsed = JSON.parse(cleanedText);
+
+
+    try{
+        const increamentedCount = await mongoose.connection.db.collection("delta_count").findOneAndUpdate(
+            {},
+            {$inc:{count:1}},
+            {
+          upsert: true,
+          returnDocument: "after"
+        }
+        )
+        console.log(increamentedCount.count)
+    }
+
+    catch(error){
+        console.log(error);
+    }
+
+
 
     res.status(200).json({type:1,avatar:response.data.result[0].titlePhoto,user,parsed,userCompleted,total,questionArray}); 
         })
