@@ -32,9 +32,9 @@ export default function Info(){
         try {
             console.log(user)
             result = (flag) ? 
-                        await axios.get(`http://localhost:3000/ratedQuestions/${user}/${friend}`)
+                        await axios.get(`https://codeforge-sn9n.onrender.com/ratedQuestions/${user}/${friend}`)
                     :
-                        await axios.get(`http://localhost:3000/topicWiseCF/${user}/${friend}`);
+                        await axios.get(`https://codeforge-sn9n.onrender.com/topicWiseCF/${user}/${friend}`);
             toast.success("Sheet Generated Successfully");
             if(flag){
                 setRatedData(result.data);
