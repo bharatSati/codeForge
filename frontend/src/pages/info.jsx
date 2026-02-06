@@ -35,7 +35,6 @@ export default function Info(){
                         await axios.get(`http://localhost:3000/ratedQuestions/${user}/${friend}`)
                     :
                         await axios.get(`http://localhost:3000/topicWiseCF/${user}/${friend}`);
-            console.log(result);
             toast.success("Sheet Generated Successfully");
             if(flag){
                 setRatedData(result.data);

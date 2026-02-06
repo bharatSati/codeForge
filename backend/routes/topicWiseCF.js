@@ -224,7 +224,6 @@ router.get('/:user/:tutor',async (req,res)=>{
           returnDocument: "after"
         }
         )
-        console.log(increamentedCount.count)
     }
 
     catch(error){

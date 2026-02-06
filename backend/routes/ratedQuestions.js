@@ -191,7 +191,6 @@ router.get('/:user/:tutor',async (req,res)=>{
                upsert: true,
                returnDocument: "after"
             })
-        console.log(increamentedCount.count);
         }
 
     catch(error){
