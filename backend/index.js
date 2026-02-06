@@ -15,13 +15,21 @@
  
 
 
-app.use(cors());
+app.use(cors({
+  origin: "https://codeforge-three.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+
  app.use('/ratedQuestions',ratedQuestions);
  app.use('/topicWiseCF',topicWiseCF);
 
- app.get("/hello",(req,res)=>{
-    res.send("hello");
- })
+app.get("/" , (req,res)=>{
+  res.json({msg:"we are in v1 testing of codeforge"})
+}) 
+
 
  app.listen(port,()=>{
     console.log(`Server running on http://localhost:${port}`)
