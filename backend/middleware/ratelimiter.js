@@ -4,6 +4,8 @@ export const globalRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 1,               
 
+  skip: (req) => req.method === "OPTIONS",
+
   keyGenerator: (req) => {
     return req.ip;
   },
