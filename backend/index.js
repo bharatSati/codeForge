@@ -14,7 +14,7 @@
  const port = process.env.PORT
  const rateLimiter = require("./middleware/ratelimiter")
  
-app.set("trust proxy", 1);
+
 
 app.use(cors({
   origin: "https://codeforge-three.vercel.app",
