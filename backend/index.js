@@ -12,8 +12,16 @@
  const topicWiseCF = require("./routes/topicWiseCF");
  const topicWiseLC = require("./routes/topicWiseLC");
  const port = process.env.PORT
- const rateLimiter = require("./middleware/ratelimiter")
- 
+ const rateLimit = require("express-rate-limit")
+
+const limiter = rateLimit({
+	windowMs: 1 * 60 * 1000, 
+	limit: 5,
+	standardHeaders: 'draft-8',
+	legacyHeaders: false,
+	ipv6Subnet: 56,
+})
+app.set("trust proxy", 1);
 
 
 app.use(cors({
@@ -24,9 +32,7 @@ app.use(cors({
 }));
 
 
-app.use(rateLimiter)
-
-
+app.use(limiter)
  app.use('/ratedQuestions',ratedQuestions);
  app.use('/topicWiseCF',topicWiseCF);
 
