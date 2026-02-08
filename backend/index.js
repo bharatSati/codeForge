@@ -12,6 +12,7 @@
  const topicWiseCF = require("./routes/topicWiseCF");
  const topicWiseLC = require("./routes/topicWiseLC");
  const port = process.env.PORT
+ const rateLimiter = require("./middleware/ratelimiter")
  
 
 
@@ -21,6 +22,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
+
+app.set("trust proxy", 1);
+app.use(rateLimiter)
 
 
  app.use('/ratedQuestions',ratedQuestions);
